@@ -1,0 +1,82 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+enum PhotoType {
+  MAIN
+  LEFT
+  RIGHT
+}
+
+enum Role {
+  USER
+  ADMIN
+}
+
+model Product {
+  id              String          @id @default(uuid())
+  name            String
+  price           Int
+  description     String          @db.Text
+  createdAt       DateTime        @default(now())
+  updatedAt       DateTime        @updatedAt
+ 
+  orderedProducts OrderedProduct[]
+  photos          Photo[]
+}
+
+model Photo {
+  id        String   @id @default(uuid())
+  url       String
+  type      PhotoType
+  product   Product  @relation(fields: [productId], references: [id])
+  productId String
+}
+
+
+model Order {
+  id              String          @id @default(uuid())
+  user            User?           @relation(fields: [userId], references: [id])
+  userId          String?
+  orderedProducts OrderedProduct[]
+  address         String
+  createdAt       DateTime        @default(now())
+  updatedAt       DateTime        @updatedAt
+}
+
+
+model Password {
+  id             String   @id @default(uuid())
+  hashedPassword String
+  user           User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId         String   @unique
+}
+
+model User {
+  id        String    @id @default(uuid())
+  name      String 
+  email     String    @unique
+  role      Role      @default(USER)
+  password  Password?
+  
+  orders    Order[]
+}
+
+model OrderedProduct {
+  id        String   @id @default(uuid())
+  product   Product  @relation(fields: [productId], references: [id])
+  productId String
+  quantity  Int
+  note      String?
+  order     Order    @relation(fields: [orderId], references: [id])
+  orderId   String
+}
