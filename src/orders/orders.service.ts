@@ -49,12 +49,34 @@ export class OrdersService {
     });
   }
 
+  public async getByUser(userId: Order['userId']): Promise<Order[] | null> {
+    return this.prismaService.order.findMany({
+      where: { userId },
+      include: {
+        orderedProducts: {
+          include: {
+            product: {
+              include: {
+                photos: {
+                  where: {
+                    type: 'RIGHT',
+                  },
+                },
+              },
+            },
+          },
+        },
+        user: true,
+      },
+    });
+  }
+
   public async create(
     orderData: Omit<Order, 'id' | 'createdAt' | 'updatedAt'> & {
       orderedProducts: Omit<OrderedProduct, 'id' | 'orderId'>[];
     },
   ): Promise<Order> {
-    const { orderedProducts, userId, address } = orderData;
+    const { orderedProducts, userId, address, totalPrice } = orderData;
     try {
       const createdOrder = await this.prismaService.order.create({
         data: {
@@ -65,6 +87,7 @@ export class OrdersService {
             connect: { id: userId },
           },
           address,
+          totalPrice,
         },
         include: {
           orderedProducts: {

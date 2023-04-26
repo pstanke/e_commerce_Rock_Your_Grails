@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { Alert, Button, Form, Spinner } from 'react-bootstrap';
 import { API_URL } from '../../../config';
 import { useDispatch } from 'react-redux';
-import { setUser } from '../../../redux/usersRedux';
+import { setUserRequest } from '../../../redux/usersRedux';
 import { Link, Navigate } from 'react-router-dom';
 
 export const Login = () => {
@@ -37,7 +37,7 @@ export const Login = () => {
         }
       })
       .then((res) => {
-        dispatch(setUser(res));
+        dispatch(setUserRequest(res));
       })
       .catch((err) => {
         console.error(err);
@@ -47,7 +47,7 @@ export const Login = () => {
   return (
     <>
       <Form className="col-12  mx-auto" onSubmit={handleSubmit}>
-        {status === 'success' && <Navigate to="/" />}
+        {status === 'success' && <Navigate to="/user" />}
         {status === 'serverError' && (
           <Alert variant="danger">
             <Alert.Heading>Something went wrong...</Alert.Heading>

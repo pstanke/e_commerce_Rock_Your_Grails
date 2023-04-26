@@ -16,8 +16,7 @@ export const Register = () => {
     formState: { errors },
   } = useForm();
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
+  const handleSubmit = () => {
     const options = {
       method: 'POST',
       headers: {

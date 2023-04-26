@@ -13,7 +13,7 @@ export const MainMenu = () => {
           <Nav.Link as={NavLink} to="/cart">
             cart
           </Nav.Link>
-          <Nav.Link as={NavLink} to="/login">
+          <Nav.Link as={NavLink} to="/user">
             user
           </Nav.Link>
         </Nav>

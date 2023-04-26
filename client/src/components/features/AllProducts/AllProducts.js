@@ -17,7 +17,12 @@ export const AllProducts = () => {
       <Container>
         <Row>
           {products.map((product) => (
-            <Col xs={12} md={6} lg={4}>
+            <Col
+              xs={12}
+              md={6}
+              xl={4}
+              className="d-flex justify-content-center"
+            >
               <ProductSummary product={product} />
             </Col>
           ))}

@@ -7,11 +7,12 @@ import { initialState } from './initialState';
 // import reducers
 // import { userReducer } from './usersRedux';
 import { productsReducer } from './productsRedux';
+import { userReducer } from './usersRedux';
 
 // combine reducers
 const subReducers = {
   products: productsReducer,
-  // user: userReducer,
+  user: userReducer,
 };
 const reducer = combineReducers(subReducers);
 

@@ -28,6 +28,15 @@ export class OrdersController {
     return order;
   }
 
+  @Get('/user/:id')
+  public async getByUser(@Param('id', new ParseUUIDPipe()) userId: string) {
+    const orders = await this.ordersService.getByUser(userId);
+    if (!orders) {
+      throw new NotFoundException('Orders not found');
+    }
+    return orders;
+  }
+
   @Post('/')
   public create(@Body() orderData: CreateOrderDTO) {
     return this.ordersService.create(orderData);

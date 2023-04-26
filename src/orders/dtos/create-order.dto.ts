@@ -1,4 +1,4 @@
-import { IsNotEmpty, IsString, IsUUID } from 'class-validator';
+import { IsNotEmpty, IsNumber, IsString, IsUUID } from 'class-validator';
 import { CreateOrderedProductDTO } from './create-ordered-product.dto';
 
 export class CreateOrderDTO {
@@ -10,6 +10,10 @@ export class CreateOrderDTO {
   @IsNotEmpty()
   @IsString()
   address: string;
+
+  @IsNotEmpty()
+  @IsNumber()
+  totalPrice: number;
 
   @IsNotEmpty()
   orderedProducts: CreateOrderedProductDTO[];
