@@ -9,12 +9,12 @@ export const TextComponent = ({ text, maxTextLength }) => {
 
   const buttonText = showFullText ? 'Show less' : 'Show more';
 
-  function handleButtonClick() {
+  const handleButtonClick = () => {
     setShowFullText(!showFullText);
-  }
+  };
 
   return (
-    <div>
+    <div className="my-4">
       <p>{displayText}</p>
       {text.length > maxTextLength && (
         <Button variant="light" onClick={handleButtonClick}>

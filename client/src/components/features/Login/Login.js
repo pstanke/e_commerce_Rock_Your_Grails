@@ -1,9 +1,11 @@
-import { useState } from 'react';
 import { Alert, Button, Form, Spinner } from 'react-bootstrap';
-import { API_URL } from '../../../config';
+
+import { useState } from 'react';
 import { useDispatch } from 'react-redux';
-import { setUserRequest } from '../../../redux/usersRedux';
 import { Link, Navigate } from 'react-router-dom';
+
+import { API_URL } from '../../../config';
+import { logInUserRequest } from '../../../redux/usersRedux';
 
 export const Login = () => {
   const [email, setEmail] = useState('');
@@ -37,7 +39,7 @@ export const Login = () => {
         }
       })
       .then((res) => {
-        dispatch(setUserRequest(res));
+        dispatch(logInUserRequest(res));
       })
       .catch((err) => {
         console.error(err);
@@ -48,28 +50,30 @@ export const Login = () => {
     <>
       <Form className="col-12  mx-auto" onSubmit={handleSubmit}>
         {status === 'success' && <Navigate to="/user" />}
+
         {status === 'serverError' && (
           <Alert variant="danger">
             <Alert.Heading>Something went wrong...</Alert.Heading>
             <p>Unexpected error... Please try again later.</p>
           </Alert>
         )}
+
         {status === 'clientError' && (
           <Alert variant="danger">
             <Alert.Heading>Incorrect data</Alert.Heading>
             <p>Login or password are incorrect...</p>
           </Alert>
         )}
+
         {status === 'loading' && (
           <Spinner
             animation="border"
             role="status"
             variant="danger"
             className="d-block mx-auto"
-          >
-            {/* <span className="sr-only">Loading...</span> */}
-          </Spinner>
+          ></Spinner>
         )}
+
         <h1>Log in</h1>
 
         <Form.Group className="mb-3" controlId="formEmail">
@@ -81,6 +85,7 @@ export const Login = () => {
             onChange={(e) => setEmail(e.target.value)}
           />
         </Form.Group>
+
         <Form.Group className="mb-3" controlId="formPassword">
           <Form.Label>Password</Form.Label>
           <Form.Control
@@ -90,6 +95,7 @@ export const Login = () => {
             onChange={(e) => setPassword(e.target.value)}
           />
         </Form.Group>
+
         <Button variant="danger" type="submit" className="col-12  my-3">
           Sign in
         </Button>

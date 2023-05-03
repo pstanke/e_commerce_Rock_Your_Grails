@@ -1,4 +1,8 @@
-import { Accordion, Card, Col, Row } from 'react-bootstrap';
+import { Accordion, Col, Row } from 'react-bootstrap';
+
+import PropTypes from 'prop-types';
+
+import { OrderProduct } from '../../common/OrderProduct/OrderProduct';
 
 export const UserOrders = ({ orders }) => {
   return (
@@ -10,61 +14,52 @@ export const UserOrders = ({ orders }) => {
               <strong>Order: </strong> {order.id}
             </div>
           </Accordion.Header>
+
           <Accordion.Body>
             <Row className="mb-3">
-              <Col>
+              <Col xs={9}>
                 <div>
                   <strong>Address: </strong>
                   {order.address}
                 </div>
               </Col>
-              <Col className="d-flex justify-content-end">
+
+              <Col xs={3} className="d-flex justify-content-end">
                 <div>
                   <strong>Total price: </strong>
                   {order.totalPrice}$
                 </div>
               </Col>
             </Row>
+
             <Row>
-              {order.orderedProducts.map((orderedProduct) => (
-                <Col
-                  className="d-flex justify-content-center"
-                  xs={12}
-                  sm={6}
-                  md={4}
-                >
-                  <Card className="mb-3">
-                    <Card.Img
-                      variant="top"
-                      src={
-                        process.env.PUBLIC_URL +
-                        `/productsImages/${orderedProduct.product.photos[0].url} `
-                      }
-                    />
-                    <Card.Body>
-                      <Card.Title>{orderedProduct.product.name}</Card.Title>
-                      <Card.Text>
-                        <div>
-                          <strong>Product price: </strong>
-                          {orderedProduct.product.price}$
-                        </div>
-                        <div>
-                          <strong>Quantity:</strong>
-                          {orderedProduct.quantity}
-                        </div>
-                        <div>
-                          <strong>Note:</strong>
-                          {orderedProduct.note}
-                        </div>
-                      </Card.Text>
-                    </Card.Body>
-                  </Card>
-                </Col>
-              ))}
+              <Accordion flush>
+                {order.orderProducts.map((orderedProduct) => (
+                  <OrderProduct product={orderedProduct} />
+                ))}
+              </Accordion>
             </Row>
           </Accordion.Body>
         </Accordion.Item>
       ))}
     </Accordion>
   );
+};
+
+UserOrders.propTypes = {
+  orders: PropTypes.arrayOf(
+    PropTypes.shape({
+      id: PropTypes.string.isRequired,
+      address: PropTypes.string.isRequired,
+      totalPrice: PropTypes.number.isRequired,
+      orderProducts: PropTypes.arrayOf(
+        PropTypes.shape({
+          id: PropTypes.number.isRequired,
+          name: PropTypes.string.isRequired,
+          quantity: PropTypes.number.isRequired,
+          price: PropTypes.number.isRequired,
+        }),
+      ).isRequired,
+    }),
+  ).isRequired,
 };

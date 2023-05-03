@@ -1,11 +1,14 @@
+import { Alert, Col, Container, ProgressBar, Row } from 'react-bootstrap';
+
 import { useSelector } from 'react-redux';
 import { getProducts, getRequests } from '../../../redux/productsRedux';
-import { Alert, Col, Container, ProgressBar, Row } from 'react-bootstrap';
+
 import { ProductSummary } from '../../common/ProductSummary/ProductSummary';
 
 export const AllProducts = () => {
   const products = useSelector(getProducts);
   const request = useSelector(getRequests);
+
   if (request.pending) {
     return <ProgressBar striped variant="danger" now={80} />;
   } else if (request.error) {

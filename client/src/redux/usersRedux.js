@@ -1,16 +1,21 @@
+/* IMPORTS */
 import axios from 'axios';
 import { API_URL } from '../config';
 
 /* INITIAL STATE */
 export const initialUserState = {
   user: null,
+  requestStatus: {
+    error: null,
+    pending: false,
+    success: null,
+  },
 };
 
 /* SELECTORS */
-export const isUser = () => {
-  const userString = localStorage.getItem('user');
-  return userString ? JSON.parse(userString) : null;
-};
+export const getUser = ({ user }) => user.user;
+
+export const getRequests = ({ user }) => user.requestStatus;
 
 /* ACTIONS */
 // action name creator
@@ -33,15 +38,16 @@ export const logOut = () => ({ type: LOG_OUT });
 
 /* THUNKS */
 
-export const setUserRequest = (payload) => {
+export const loadUserRequest = () => {
   return async (dispatch) => {
     dispatch(startRequest());
     try {
-      const payloadString = JSON.stringify(payload);
-      localStorage.setItem('user', payloadString);
-      dispatch(setUser(payload));
-      await dispatch(loadUserOrdersRequest(payload.id));
+      const userString = localStorage.getItem('user');
+      const user = userString ? JSON.parse(userString) : null;
 
+      if (user !== null) {
+        await dispatch(loadUserOrdersRequest(user));
+      }
       dispatch(endRequest());
     } catch (e) {
       dispatch(errorRequest(e.message));
@@ -49,15 +55,30 @@ export const setUserRequest = (payload) => {
   };
 };
 
-const loadUserOrdersRequest = (id) => {
+export const logInUserRequest = (payload) => {
   return async (dispatch) => {
     dispatch(startRequest());
     try {
-      let res = await axios.get(`${API_URL}/orders/user/${id}`);
-      localStorage.setItem(
-        'user',
-        JSON.stringify({ ...isUser(), orders: res.data }),
-      );
+      const payloadString = JSON.stringify(payload);
+      localStorage.setItem('user', payloadString);
+
+      await dispatch(loadUserOrdersRequest(payload));
+      dispatch(endRequest());
+    } catch (e) {
+      dispatch(errorRequest(e.message));
+    }
+  };
+};
+
+export const loadUserOrdersRequest = (payload) => {
+  return async (dispatch) => {
+    dispatch(startRequest());
+    try {
+      let res = await axios.get(`${API_URL}/orders/user/${payload.id}`);
+      const updatedUser = { ...payload, orders: res.data };
+      localStorage.setItem('user', JSON.stringify(updatedUser));
+
+      dispatch(setUser(updatedUser));
       dispatch(endRequest());
     } catch (e) {
       dispatch(errorRequest(e.message));
@@ -82,9 +103,9 @@ export const logOutRequest = () => {
 export const userReducer = (statePart = initialUserState, action) => {
   switch (action.type) {
     case LOG_OUT:
-      return { user: null };
+      return { ...statePart, user: null };
     case SET_USER:
-      return { user: action.payload };
+      return { ...statePart, user: action.payload };
     case START_REQUEST:
       return {
         ...statePart,

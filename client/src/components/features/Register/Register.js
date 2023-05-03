@@ -1,8 +1,11 @@
-import { useState } from 'react';
 import { Alert, Button, Form, Spinner } from 'react-bootstrap';
-import { API_URL } from '../../../config';
+
+import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
+
+import { API_URL } from '../../../config';
+
 export const Register = () => {
   const [email, setEmail] = useState('');
   const [name, setName] = useState('');
@@ -50,12 +53,14 @@ export const Register = () => {
             <p>You have been successfully registered! You can now log in...</p>
           </Alert>
         )}
+
         {status === 'serverError' && (
           <Alert variant="danger">
             <Alert.Heading>Something went wrong...</Alert.Heading>
             <p>Unexpected error... Please try again later.</p>
           </Alert>
         )}
+
         {status === 'clientError' && (
           <Alert variant="warning">
             <Alert.Heading>Not enough data</Alert.Heading>
@@ -69,16 +74,16 @@ export const Register = () => {
             <p>You have to use other email.</p>
           </Alert>
         )}
+
         {status === 'loading' && (
           <Spinner
             animation="border"
             role="status"
             variant="danger"
             className="d-block mx-auto"
-          >
-            {/* <span className="sr-only">Loading...</span> */}
-          </Spinner>
+          ></Spinner>
         )}
+
         <h1>Sign up</h1>
 
         <Form.Group className="mb-3" controlId="formEmail">
@@ -98,6 +103,7 @@ export const Register = () => {
             </small>
           )}
         </Form.Group>
+
         <Form.Group className="mb-3" controlId="formName">
           <Form.Label>Name</Form.Label>
           <Form.Control
@@ -117,6 +123,7 @@ export const Register = () => {
             </small>
           )}
         </Form.Group>
+
         <Form.Group className="mb-3" controlId="formPassword">
           <Form.Label>Password</Form.Label>
           <Form.Control
@@ -136,6 +143,7 @@ export const Register = () => {
             </small>
           )}
         </Form.Group>
+
         <Form.Group className="mb-3" controlId="formPasswordRepeat">
           <Form.Label>Repeat Password</Form.Label>
           <Form.Control
@@ -160,6 +168,7 @@ export const Register = () => {
           Submit
         </Button>
       </Form>
+
       <div className="d-flex justify-content-center mt-3">
         <h4> Already a customer? </h4>
       </div>

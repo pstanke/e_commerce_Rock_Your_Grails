@@ -5,8 +5,9 @@ import {
   Param,
   ParseUUIDPipe,
 } from '@nestjs/common';
-import { ProductsService } from './products.service';
 import { Product } from '@prisma/client';
+
+import { ProductsService } from './products.service';
 
 @Controller('products')
 export class ProductsController {

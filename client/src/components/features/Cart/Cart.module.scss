@@ -1,0 +1,20 @@
+.link {
+  text-decoration: none;
+  color: black;
+  text-align: center;
+}
+
+.link:hover {
+  color: #ff3131;
+}
+
+.alert {
+  display: flex;
+  justify-content: space-around;
+}
+
+.total {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}

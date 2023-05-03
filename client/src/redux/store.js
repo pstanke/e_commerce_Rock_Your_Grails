@@ -5,14 +5,15 @@ import thunk from 'redux-thunk';
 import { initialState } from './initialState';
 
 // import reducers
-// import { userReducer } from './usersRedux';
 import { productsReducer } from './productsRedux';
 import { userReducer } from './usersRedux';
+import { cartReducer } from './cartRedux';
 
 // combine reducers
 const subReducers = {
   products: productsReducer,
   user: userReducer,
+  cart: cartReducer,
 };
 const reducer = combineReducers(subReducers);
 

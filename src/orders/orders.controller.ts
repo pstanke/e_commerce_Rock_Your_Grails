@@ -6,13 +6,20 @@ import {
   Param,
   ParseUUIDPipe,
   Post,
+  UseGuards,
 } from '@nestjs/common';
+import { Order } from '@prisma/client';
+
 import { OrdersService } from './orders.service';
 import { CreateOrderDTO } from './dtos/create-order.dto';
+import { CreateOrderedProductDTO } from './dtos/create-ordered-product.dto';
+import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
 
 @Controller('orders')
 export class OrdersController {
   constructor(private ordersService: OrdersService) {}
+
+  /* for admin panel  
 
   @Get('/')
   public getAll(): any {
@@ -27,7 +34,9 @@ export class OrdersController {
     }
     return order;
   }
+  */
 
+  @UseGuards(JwtAuthGuard)
   @Get('/user/:id')
   public async getByUser(@Param('id', new ParseUUIDPipe()) userId: string) {
     const orders = await this.ordersService.getByUser(userId);
@@ -37,8 +46,16 @@ export class OrdersController {
     return orders;
   }
 
+  @UseGuards(JwtAuthGuard)
   @Post('/')
-  public create(@Body() orderData: CreateOrderDTO) {
-    return this.ordersService.create(orderData);
+  public async create(
+    @Body()
+    requestBody: {
+      orderData: CreateOrderDTO;
+      orderedProducts: CreateOrderedProductDTO[];
+    },
+  ): Promise<Order> {
+    const { orderData, orderedProducts } = requestBody;
+    return await this.ordersService.create(orderData, orderedProducts);
   }
 }

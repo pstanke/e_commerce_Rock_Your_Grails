@@ -16,5 +16,5 @@ export class CreateOrderDTO {
   totalPrice: number;
 
   @IsNotEmpty()
-  orderedProducts: CreateOrderedProductDTO[];
+  orderProducts: CreateOrderedProductDTO[];
 }

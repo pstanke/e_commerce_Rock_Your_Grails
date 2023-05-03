@@ -21,5 +21,5 @@ export class CreateOrderedProductDTO {
   @IsString()
   note: string;
 
-  product: Product;
+  product: Product[];
 }

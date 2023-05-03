@@ -1,5 +1,16 @@
+/* IMPORTS */
 import axios from 'axios';
 import { API_URL } from '../config';
+
+/* INITIAL STATE */
+export const initialProductsState = {
+  data: [],
+  requestStatus: {
+    error: null,
+    pending: false,
+    success: null,
+  },
+};
 
 /* SELECTORS */
 export const getProducts = ({ products }) => products.data;
@@ -10,7 +21,6 @@ export const getProductById = (state, id) =>
   state.products.data.find((product) => product.id === id);
 
 /* ACTIONS */
-
 // action name creator
 const reducerName = 'products';
 const createActionName = (name) => `app/${reducerName}/${name}`;
@@ -42,24 +52,12 @@ export const loadProductsRequest = () => {
   };
 };
 
-/* INITIAL STATE */
-
-export const initialProductsState = {
-  data: [],
-  requestStatus: {
-    error: null,
-    pending: false,
-    success: null,
-  },
-};
-
 /* REDUCER */
 
 export const productsReducer = (statePart = initialProductsState, action) => {
   switch (action.type) {
     case LOAD_PRODUCTS:
       return { ...statePart, data: [...action.payload] };
-
     case START_REQUEST:
       return {
         ...statePart,

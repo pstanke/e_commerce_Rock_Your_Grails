@@ -1,11 +1,13 @@
 import { Injectable, ConflictException } from '@nestjs/common';
 import { Password, User } from '@prisma/client';
+
 import { PrismaService } from '../prisma/prisma.service';
 
 @Injectable()
 export class UsersService {
   constructor(private prismaService: PrismaService) {}
 
+  /* for admin panel 
   public getAll(): Promise<User[]> {
     return this.prismaService.user.findMany({
       select: {
@@ -17,6 +19,7 @@ export class UsersService {
       },
     });
   }
+    */
 
   public getById(id: User['id']): Promise<User | null> {
     return this.prismaService.user.findUnique({
@@ -30,6 +33,7 @@ export class UsersService {
       },
     });
   }
+
   public async getByEmail(
     email: User['email'],
   ): Promise<(User & { password: Password }) | null> {
@@ -63,34 +67,4 @@ export class UsersService {
       throw err;
     }
   }
-
-  // public async updateById(
-  //   id: User['id'],
-  //   userData: Omit<User, 'id'>,
-  //   password?: string | undefined,
-  // ): Promise<User> {
-  //   if (password === undefined) {
-  //     return await this.prismaService.user.update({
-  //       where: { id },
-  //       data: userData,
-  //     });
-  //   }
-  //   return await this.prismaService.user.update({
-  //     where: { id },
-  //     data: {
-  //       ...userData,
-  //       password: {
-  //         update: {
-  //           hashedPassword: password,
-  //         },
-  //       },
-  //     },
-  //   });
-  // }
-
-  // public deleteById(id: User['id']): Promise<User> {
-  //   return this.prismaService.user.delete({
-  //     where: { id },
-  //   });
-  // }
 }

@@ -1,7 +1,3 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
-
 generator client {
   provider = "prisma-client-js"
 }
@@ -23,37 +19,47 @@ enum Role {
 }
 
 model Product {
-  id              String          @id @default(uuid())
-  name            String
-  price           Int
-  description     String          @db.Text
-  createdAt       DateTime        @default(now())
-  updatedAt       DateTime        @updatedAt
- 
-  orderedProducts OrderedProduct[]
-  photos          Photo[]
+  id           String  @id @default(uuid())
+  name         String
+  price        Int
+  description  String  @db.Text
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+
+  orderProducts OrderedProduct[]
+  photos        Photo[]
 }
 
 model Photo {
-  id        String   @id @default(uuid())
+  id        String      @id @default(uuid())
   url       String
   type      PhotoType
-  product   Product  @relation(fields: [productId], references: [id])
+  product   Product     @relation(fields: [productId], references: [id])
   productId String
 }
 
-
 model Order {
-  id              String          @id @default(uuid())
-  user            User?           @relation(fields: [userId], references: [id])
-  userId          String?
-  orderedProducts OrderedProduct[]
-  address         String
-  totalPrice      Int
-  createdAt       DateTime        @default(now())
-  updatedAt       DateTime        @updatedAt
+  id         String       @id @default(uuid())
+  user       User         @relation(fields: [userId], references: [id])
+  userId     String
+  address    String
+  totalPrice Int
+  createdAt  DateTime    @default(now())
+  updatedAt  DateTime    @updatedAt
+
+  orderProducts OrderedProduct[]
 }
 
+model OrderedProduct {
+  id        String   @id @default(uuid())
+  order      Order    @relation(fields: [orderId], references: [id])
+  orderId    String
+  product    Product  @relation(fields: [productId], references: [id])
+  productId  String
+  quantity   Int
+  note       String?
+}
 
 model Password {
   id             String   @id @default(uuid())
@@ -63,21 +69,14 @@ model Password {
 }
 
 model User {
-  id        String    @id @default(uuid())
-  name      String 
-  email     String    @unique
-  role      Role      @default(USER)
-  password  Password?
-  
-  orders    Order[]
+  id       String   @id @default(uuid())
+  name     String
+  email    String   @unique
+  role     Role     @default(USER)
+  password Password?
+
+  orders   Order[]
 }
 
-model OrderedProduct {
-  id        String   @id @default(uuid())
-  product   Product  @relation(fields: [productId], references: [id])
-  productId String
-  quantity  Int
-  note      String?
-  order     Order    @relation(fields: [orderId], references: [id])
-  orderId   String
-}
+
+
