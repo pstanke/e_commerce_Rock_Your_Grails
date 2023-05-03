@@ -21,6 +21,7 @@ export const AllProducts = () => {
         <Row>
           {products.map((product) => (
             <Col
+              key={product.id}
               xs={12}
               md={6}
               xl={4}

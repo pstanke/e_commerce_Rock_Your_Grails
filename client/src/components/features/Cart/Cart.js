@@ -40,7 +40,7 @@ export const Cart = () => {
         </Row>
 
         {products.map((product) => (
-          <CartProduct product={product} />
+          <CartProduct product={product} key={product.id} />
         ))}
 
         <Link to={`/products`} className={styles.link}>
